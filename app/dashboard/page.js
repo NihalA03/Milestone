@@ -216,7 +216,7 @@ export default function DashboardPage() {
       }
   };
 
-  // Handle file analysis
+
   const handleAnalyzeFile = async (e) => {
     e.preventDefault();
     if (!fileInput) {
@@ -254,7 +254,7 @@ export default function DashboardPage() {
         csvData = await extractCSVData(fileContent);
       }
 
-      // Save to Firestore
+   
       await addDoc(collection(db, "analysisRecords"), {
         userEmail: user.email,
         fileName: fileName,
@@ -274,7 +274,7 @@ export default function DashboardPage() {
         csvData,
         fileContent,
       });
-      // Refresh analysis records
+     
       const recordsRef = collection(db, "analysisRecords");
       const q = query(
         recordsRef,
@@ -370,7 +370,7 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {/* Profile Tab */}
+       
         {activeTab === "profile" && (
           <div className="bg-white p-8 rounded-2xl shadow">
             <h2 className="text-2xl font-semibold mb-6 text-gray-900">
@@ -400,7 +400,7 @@ export default function DashboardPage() {
 
         {activeTab === "analyze" && (
           <div className="space-y-6">
-            {/* Text Analysis Section */}
+           
             <div className="bg-white p-8 rounded-2xl shadow">
               <h2 className="text-2xl font-semibold mb-4 text-gray-900">
                 Paste Comments
@@ -459,7 +459,7 @@ export default function DashboardPage() {
               </form>
             </div>
 
-            {/* Analysis Message */}
+           
             {analysisMessage && (
               <div className={`border-l-4 p-5 rounded-lg font-medium transition-all ${
                 analysisMessage.includes("Error") || analysisMessage.includes("Rate limit")
@@ -473,7 +473,6 @@ export default function DashboardPage() {
               </div>
             )}
 
-            {/* Latest Analysis Output - Modern Dark Theme */}
             {latestAnalysis && (
               <div className="mt-8">
                 <div className="mb-4 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 border border-gray-700 p-6 rounded-2xl shadow-lg">
@@ -486,7 +485,7 @@ export default function DashboardPage() {
                     </div>
                   </div>
                 </div>
-                {/* Show original content or file name */}
+               
                 {latestAnalysis.type === "text" && (
                   <div className="bg-gradient-to-br from-gray-800 via-gray-900 to-gray-800 border border-gray-700 p-5 rounded-2xl shadow-lg mt-4">
                     <p className="text-xs font-bold text-blue-300 mb-3 uppercase tracking-wide flex items-center gap-2">
@@ -542,42 +541,20 @@ export default function DashboardPage() {
               <p className="text-gray-600">Loading records...</p>
             ) : analysisRecords.length === 0 ? (
               <p className="text-gray-600 font-medium">
-                No analysis records yet. Start by analyzing some feedback or
-                files!
+                No analysis records yet. Start by analyzing some feedback or files!
               </p>
             ) : (
               <div className="space-y-6">
                 {analysisRecords.map((record) => (
                   <div
                     key={record.id}
-                    className="border border-gray-300 rounded-xl p-6 hover:shadow-lg transition bg-gradient-to-br from-white to-gray-50"
+                    className="rounded-xl shadow-lg transition bg-gradient-to-br from-white to-gray-50 w-full"
+                    style={{ width: '100%', maxWidth: '100vw', margin: 0, padding: '1rem' }}
                   >
-                    {/* Header */}
-                    <div className="flex justify-between items-start mb-4 pb-4 border-b border-gray-200">
-                      <div>
-                        <h3 className="font-bold text-lg text-gray-900">
-                          {record.type === "file"
-                            ? `📄 ${record.fileName}`
-                            : "💬 Text Analysis"}
-                        </h3>
-                        <p className="text-xs text-gray-500 mt-1">
-                          {record.type === "file" ? "File" : "Text"} Analysis • {" "}
-                          {new Date(record.timestamp?.toDate?.()).toLocaleString()}
-                        </p>
-                      </div>
-                      <span className={`px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wide ${
-                        record.type === "file" 
-                          ? "bg-blue-100 text-blue-800" 
-                          : "bg-purple-100 text-purple-800"
-                      }`}>
-                        {record.type}
-                      </span>
-                    </div>
-
                     {record.csvData && (
                       <div className="mb-5">
                         <p className="text-xs font-bold text-gray-700 mb-3 uppercase tracking-wide">
-                          📊 CSV Data Summary
+                          CSV Data Summary
                         </p>
                         <div className="bg-white border border-gray-200 p-4 rounded-lg max-h-48 overflow-y-auto">
                           <div className="text-xs space-y-2">
@@ -598,24 +575,21 @@ export default function DashboardPage() {
                       </div>
                     )}
 
-                   
-<div className="mb-4 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 border border-gray-700 p-6 rounded-2xl shadow-lg">
-  <p className="text-xs font-bold text-blue-400 mb-3 uppercase tracking-wide">
-    🤖 AI Analysis & Insights
-  </p>
-  <div className="prose prose-sm max-w-none">
-    <div className="text-sm text-gray-100 leading-relaxed whitespace-pre-wrap break-words font-normal">
-      {cleanMarkdown(record.analysis)}
-    </div>
-  </div>
-</div>
+                    <div className="mb-4 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 border border-gray-700 p-4 rounded-2xl shadow-lg w-full" style={{ boxSizing: 'border-box' }}>
+                      <p className="text-xs font-bold text-blue-400 mb-3 uppercase tracking-wide">
+                        AI ANALYSIS & INSIGHTS
+                      </p>
+                      <div className="prose prose-sm max-w-none">
+                        <div className="text-sm text-gray-100 leading-relaxed whitespace-pre-wrap break-words font-normal">
+                          {cleanMarkdown(record.analysis)}
+                        </div>
+                      </div>
+                    </div>
 
-
-                   
                     {record.type === "text" && (
-                      <div className="bg-gradient-to-br from-gray-800 via-gray-900 to-gray-800 border border-gray-700 p-5 rounded-2xl shadow-lg mt-4">
-                        <p className="text-xs font-bold text-blue-300 mb-3 uppercase tracking-wide flex items-center gap-2">
-                          <span className="text-lg">📝</span> Original Content
+                      <div className="bg-gradient-to-br from-gray-800 via-gray-900 to-gray-800 border border-gray-700 p-4 rounded-2xl shadow-lg mt-4 w-full" style={{ boxSizing: 'border-box' }}>
+                        <p className="text-xs font-bold text-blue-300 mb-3 uppercase tracking-wide">
+                          Original Content
                         </p>
                         <div className="text-sm font-mono text-gray-100 bg-gray-900 p-3 rounded border border-gray-700 max-h-40 overflow-y-auto whitespace-pre-wrap break-words">
                           {record.content}
